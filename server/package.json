@@ -1,0 +1,30 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "backend",
+  "main": "app.js",
+  "scripts": {
+    "dev": "concurrently -k \"tsc -p ./src -w\" \"nodemon ./dist/app.js\"",
+    "build": "tsc -p ./src"
+  },
+  "keywords": [
+    "server",
+    "node",
+    "express",
+    "jwt"
+  ],
+  "author": "Patrick Becker",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.9.18"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.6",
+    "@types/mongoose": "^5.7.22",
+    "@types/node": "^14.0.11",
+    "concurrently": "^5.2.0",
+    "nodemon": "^2.0.4",
+    "typescript": "^3.9.6"
+  }
+}
