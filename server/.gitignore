@@ -4,3 +4,5 @@
 # production
 /dist
 
+# misc
+.env
