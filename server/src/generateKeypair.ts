@@ -1,6 +1,6 @@
-import crypto = require("crypto");
-import fs = require("fs");
-import path = require("path");
+import crypto from "crypto";
+import fs from "fs";
+import path from "path";
 
 /**
  * This module will generate a public and private keypair and save them to the current directory
