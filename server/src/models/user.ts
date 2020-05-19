@@ -5,6 +5,7 @@ export interface UserDocument extends Document {
   username: string;
   hash: string;
   salt: string;
+  followers: String[];
   createdAt: Date;
 }
 
@@ -26,6 +27,8 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  followers: [],
+  following: [],
   createdAt: {
     type: Date,
     default: Date.now

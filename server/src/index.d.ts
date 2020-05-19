@@ -3,7 +3,9 @@ declare namespace Express {
     user?: {
       _id: string,
       email: string,
-      username: string
+      username: string,
+      followers: string[],
+      following: string[]
     }
   }
 }
