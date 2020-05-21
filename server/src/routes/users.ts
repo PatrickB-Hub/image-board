@@ -192,4 +192,28 @@ router.route("/search")
       .catch((err) => next(err))
   });
 
+router.route("/:id")
+  .get((req, res, next) => {
+    User.findById(req.params.id)
+      .then(user => {
+        if (!user) {
+          res.status(401).json({ success: false, msg: `Could not find user: ${req.params.id}` });
+          return;
+        }
+
+        const { _id, email, username, followers, following } = user
+        return res.status(200).json({
+          success: true,
+          user: {
+            id: _id,
+            email,
+            username,
+            followers,
+            following
+          }
+        })
+      })
+      .catch(err => next(err))
+  });
+
 export default router;

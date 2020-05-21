@@ -6,6 +6,7 @@ export interface UserDocument extends Document {
   hash: string;
   salt: string;
   followers: String[];
+  following: String[];
   createdAt: Date;
 }
 
