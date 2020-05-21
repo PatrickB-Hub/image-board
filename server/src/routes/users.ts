@@ -173,4 +173,23 @@ router.route("/unfollow")
       }
     });
 
+router.route("/search")
+  .post((req, res, next) => {
+    User.findOne({
+      $or: [
+        { email: req.body.text },
+        { username: req.body.text }
+      ]
+    })
+      .then(user => {
+        if (!user) {
+          res.status(401).json({ success: false, msg: "Could not find user" });
+          return;
+        }
+
+        res.status(200).json({ success: true, userId: user._id })
+      })
+      .catch((err) => next(err))
+  });
+
 export default router;
