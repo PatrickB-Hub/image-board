@@ -135,4 +135,42 @@ router.route("/follow")
       }
     });
 
+router.route("/unfollow")
+  .post(
+    passport.authenticate("jwt", { session: false }),
+    (req, res, next) => {
+      if (req.user) {
+        const { _id } = req.user;
+        const { profileId } = req.body;
+
+        User.findOneAndUpdate({
+          _id: _id
+        }, {
+          $pull: { following: profileId }
+        }, { new: true })
+          .then(user => {
+            if (!user) {
+              res.status(401).json({ success: false, msg: `Could not find user: ${_id}` });
+              return;
+            }
+
+            User.findOneAndUpdate({
+              _id: profileId
+            }, {
+              $pull: { followers: _id }
+            }, { new: true })
+              .then(user => {
+                if (!user) {
+                  res.status(401).json({ success: false, msg: `Could not find profile: ${profileId}` });
+                  return;
+                }
+
+                res.status(200).json({ success: true, userId: _id })
+              })
+              .catch((err) => next(err));
+          })
+          .catch((err) => next(err));
+      }
+    });
+
 export default router;
