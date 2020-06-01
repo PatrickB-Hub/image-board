@@ -72,5 +72,19 @@ router.get("/",
       .then(posts => res.status(200).json({ success: true, posts }))
       .catch(err => console.log(err))
   });
+
+router.get("/following",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    if (req.user) {
+      Post.find({
+        "user": { $in: req.user.following }
+      })
+        .populate({ path: "user", select: "username" })
+        .sort({ createdAt: -1 })
+        .then(posts => res.status(200).json({ success: true, posts }))
+        .catch(err => console.log(err))
+    }
+  });
   
 export default router;
