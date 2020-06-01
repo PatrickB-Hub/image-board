@@ -56,4 +56,13 @@ router.post("/add",
   });
 
 
+router.delete("/delete",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { postId } = req.body;
+    Post.findOneAndDelete({ _id: postId })
+      .then(post => res.status(200).json({ success: true, post }))
+      .catch(err => console.log(err))
+  });
+
 export default router;
