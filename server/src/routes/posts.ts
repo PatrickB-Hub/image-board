@@ -55,7 +55,6 @@ router.post("/add",
     }
   });
 
-
 router.delete("/delete",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
@@ -65,4 +64,13 @@ router.delete("/delete",
       .catch(err => console.log(err))
   });
 
+router.get("/",
+  (_req, res) => {
+    Post.find()
+      .populate({ path: "user", select: "username" })
+      .sort({ createdAt: -1 })
+      .then(posts => res.status(200).json({ success: true, posts }))
+      .catch(err => console.log(err))
+  });
+  
 export default router;
