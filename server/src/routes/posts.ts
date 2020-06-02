@@ -141,4 +141,15 @@ router.post("/comment",
     }
   });
 
+router.get("/:userId",
+  (req, res) => {
+    const { userId } = req.params
+
+    Post.find({ "user": userId })
+      .populate({ path: "user", select: "username" })
+      .sort({ createdAt: -1 })
+      .then(posts => res.status(200).json({ success: true, posts }))
+      .catch(err => console.log(err));
+  });
+
 export default router;
