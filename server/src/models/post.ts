@@ -12,6 +12,7 @@ export interface PostDocument extends Document {
   filePath: String;
   user: Object;
   rating: Rating;
+  comments: Array<Object>;
   createdAt: Date;
 }
 
@@ -39,6 +40,10 @@ const PostSchema = new Schema({
   },
   rating: {
     type: Object,
+    required: true
+  },
+  comments: {
+    type: Array,
     required: true
   },
   createdAt: {

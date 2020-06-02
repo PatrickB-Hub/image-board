@@ -123,4 +123,22 @@ router.put("/rating",
       .catch(err => console.log(err))
   });
 
+router.post("/comment",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    if (req.user) {
+      const { postId, user, message, createdAt } = req.body;
+      const newComment = { postId, user, message, createdAt };
+
+      Post.updateOne({ _id: postId }, { $push: { comments: newComment } })
+        .populate({ path: "user", select: "username" })
+        .sort({ createdAt: -1 })
+        .then(response => {
+          if (response.nModified)
+            res.status(200).json({ success: true, comment: newComment })
+        })
+        .catch(err => console.log(err));
+    }
+  });
+
 export default router;
