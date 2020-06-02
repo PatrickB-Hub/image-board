@@ -1,11 +1,17 @@
 import { Schema, Document, model } from "mongoose";
 
+type Rating = {
+  overallRating: number,
+  totalRating: number,
+  individualRatings: Array<{ userId: string, rating: number }>
+}
 export interface PostDocument extends Document {
   camera: String;
   location: String;
   description: String;
   filePath: String;
   user: Object;
+  rating: Rating;
   createdAt: Date;
 }
 
@@ -30,6 +36,10 @@ const PostSchema = new Schema({
     type: String,
     required: true,
     ref: "User"
+  },
+  rating: {
+    type: Object,
+    required: true
   },
   createdAt: {
     type: Date,

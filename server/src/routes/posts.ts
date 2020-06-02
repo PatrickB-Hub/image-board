@@ -2,6 +2,8 @@ import * as express from "express";
 import passport from "passport";
 import { v4 as uuidv4 } from "uuid";
 
+import { calcOverallRating } from "../lib/utils";
+
 import Post from "../models/post";
 
 const router = express.Router();
@@ -86,5 +88,39 @@ router.get("/following",
         .catch(err => console.log(err))
     }
   });
-  
+
+router.put("/rating",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { _id, rating } = req.body;
+
+    Post.findById(_id)
+      .populate({ path: "user", select: "username" })
+      .sort({ createdAt: -1 })
+      .then(post => {
+
+        if (req.user && post && post.rating) {
+          const { overallRating, totalRating, individualRatings } = post.rating;
+
+          const newRating = calcOverallRating(
+            overallRating,
+            totalRating,
+            individualRatings,
+            rating,
+            req.user._id
+          );
+
+          Post.updateOne({ _id }, { rating: newRating })
+            .then(response => {
+              if (response.nModified) {
+                post.rating = newRating;
+                res.status(200).json({ success: true, post });
+              }
+            })
+            .catch(err => console.log(err))
+        }
+      })
+      .catch(err => console.log(err))
+  });
+
 export default router;

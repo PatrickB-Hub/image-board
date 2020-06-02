@@ -74,5 +74,47 @@ const issueJWT = (id: string) => {
   };
 }
 
-export { validPassword, genPassword, issueJWT };
+/**
+ * 
+ * @param currOverallRating - The overall rating.  
+ * @param totalRating - The number of users that rated.  
+ * @param individualRatings - Array with userIds and ratings. 
+ * @param newRating - The new Rating.  
+ * @param currentUserId - The id of the logged in user, that is rating the post.  
+ *  
+ * We use this to update the rating whenever a user rates a post.
+ * 
+ */
+const calcOverallRating = (
+  overallRating: number,
+  totalRating: number,
+  individualRatings: {
+    userId: string;
+    rating: number;
+  }[],
+  newRating: number,
+  currentUserId: string) => {
+
+  const existingUserIndex = individualRatings.findIndex(rating => rating.userId.toString() === currentUserId.toString());
+  const existingUserRating = (existingUserIndex !== -1) ? individualRatings.splice(existingUserIndex, 1) : [];
+
+  const newRatingObj = {
+    overallRating,
+    totalRating,
+    individualRatings
+  };
+
+  if (existingUserRating.length === 0) {
+    newRatingObj.overallRating = ((overallRating * totalRating) + newRating) / (totalRating + 1);
+    newRatingObj.totalRating += 1;
+    newRatingObj.individualRatings.push({ userId: currentUserId, rating: newRating });
+  } else {
+    newRatingObj.overallRating = ((overallRating * totalRating) + (newRating - existingUserRating[0].rating)) / (totalRating);
+    newRatingObj.individualRatings.push({ userId: currentUserId, rating: newRating });
+  }
+
+  return newRatingObj;
+}
+
+export { validPassword, genPassword, issueJWT, calcOverallRating };
 
