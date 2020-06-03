@@ -3,6 +3,10 @@
 
 # production
 /dist
+/mongo-data
+/mongo
 
 # misc
+/ssl-cert
+/.well-known
 .env
