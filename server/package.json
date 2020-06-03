@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "dev": "concurrently -k \"tsc -p ./src -w\" \"nodemon ./dist/app.js\"",
-    "build": "tsc -p ./src"
+    "build": "tsc -p ./src",
+    "prod": "npm run build && node ./dist/generateKeypair.js && node ./dist/app.js"
   },
   "keywords": [
     "server",
