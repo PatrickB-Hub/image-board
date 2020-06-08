@@ -4,6 +4,7 @@
   "description": "frontend",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.10.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
@@ -38,6 +39,7 @@
     ]
   },
   "devDependencies": {
+    "@types/material-ui": "^0.21.8",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-redux": "^7.1.9",
