@@ -64,6 +64,9 @@ const Header: React.FC = () => {
         onClose={handleClose}
       >
         <MenuItem onClick={handleClose}>
+          <Link to="/image-board/login">Log In</Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
           <Link to="/image-board/register">Sign Up</Link>
         </MenuItem>
       </Menu>
