@@ -1,12 +1,17 @@
 import React from "react";
+import { Provider } from "react-redux";
+import { ConfirmProvider } from "material-ui-confirm";
 
-import Main from "../src/components/Layout/Main";
+import { store } from "./store/configureStore";
+import AppRouter from "./router";
 
 const App: React.FC = () => {
   return (
-    <Main>
-      <h1>App</h1>
-    </Main>
+    <Provider store={store}>
+      <ConfirmProvider>
+        <AppRouter />
+      </ConfirmProvider>
+    </Provider>
   );
 };
 
