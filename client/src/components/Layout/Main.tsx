@@ -1,5 +1,7 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
+import { Grid } from "@material-ui/core";
+
+import Footer from "./Footer";
 
 const Main: React.FC<{ children: React.ReactElement }> = ({ children }) => (
   <div>
@@ -11,6 +13,7 @@ const Main: React.FC<{ children: React.ReactElement }> = ({ children }) => (
     >
       {children}
     </Grid>
+    <Footer />
   </div>
 );
 
