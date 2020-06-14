@@ -1,6 +1,7 @@
 import { Dispatch } from "redux";
 
 import { User } from "../types/User";
+import { SET_USER } from "../types/actions/UserActions";
 import { GET_ERRORS } from "../types/actions/ErrorActions";
 import { AppActions } from "../types/actions";
 
@@ -30,9 +31,17 @@ export const loginUser = (userData: User) => (dispatch: Dispatch<AppActions>) =>
   useFetch("POST", API_URL + "/users/login", userData)
     .then(data => {
       if (data.success) {
+        // store jwt in local storage
         const { token } = data;
         localStorage.setItem("jwt", token);
+
+        // set current user
         headers.append("Authorization", token);
+        useFetch("GET", API_URL + "/users")
+          .then(res => dispatch({
+            type: SET_USER,
+            user: res.user
+          }));
       } else {
         dispatch({
           type: GET_ERRORS,
@@ -46,4 +55,16 @@ export const loginUser = (userData: User) => (dispatch: Dispatch<AppActions>) =>
         errors: err
       })
     });
+}
+
+
+export const setUser = () => (dispatch: Dispatch<AppActions>) => {
+  useFetch("GET", API_URL + "/users")
+    .then(data => {
+      if (data.success)
+        dispatch({
+          type: SET_USER,
+          user: data.user
+        })
+    })
 }
