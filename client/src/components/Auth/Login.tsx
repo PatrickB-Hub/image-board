@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { bindActionCreators } from "redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { Paper, TextField, Button, makeStyles } from "@material-ui/core";
@@ -39,13 +39,20 @@ const useStyles = makeStyles({
 
 type Props = LinkStateProps & LinkDispatchProps;
 
-const Login: React.FC<Props> = ({ loginUser, errors }) => {
+const Login: React.FC<Props> = ({ loginUser, isAuthenticated, errors }) => {
   const classes = useStyles();
+  const history = useHistory();
 
   const [loginInfo, setLoginInfo] = useState({
     email: "",
     password: "",
   });
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push("/image-board/");
+    }
+  }, [isAuthenticated, history]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginInfo({ ...loginInfo, [e.target.name]: e.target.value });
@@ -95,6 +102,7 @@ const Login: React.FC<Props> = ({ loginUser, errors }) => {
 };
 
 interface LinkStateProps {
+  isAuthenticated: boolean;
   errors: Errors;
 }
 
@@ -103,6 +111,7 @@ interface LinkDispatchProps {
 }
 
 const mapStateToProps = (state: AppState): LinkStateProps => ({
+  isAuthenticated: state.user.isAuthenticated,
   errors: state.errors,
 });
 
