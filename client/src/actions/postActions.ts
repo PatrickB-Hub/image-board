@@ -1,0 +1,35 @@
+import { Dispatch } from "redux";
+
+import { Post } from "../types/Post";
+import { ADD_POST } from "../types/actions/PostActions";
+
+import { AppActions } from "../types/actions";
+
+import useFetch, { headers, API_URL } from "../utils/useFetch";
+
+export const addPost = (postData: Post) => (dispatch: Dispatch<AppActions>) => {
+  headers.delete("Content-Type");
+
+  const { camera, location, description, files } = postData;
+
+  if (camera && location && description && files) {
+    let formData = new FormData();
+    formData.append("camera", camera);
+    formData.append("location", location);
+    formData.append("description", description);
+    formData.append('file', files[0]);
+
+    useFetch("POST", API_URL + "/posts/add", formData, true)
+      .then(data => {
+        headers.set("Content-Type", "application/json");
+        dispatch({
+          type: ADD_POST,
+          post: data.post
+        });
+      })
+      .catch(err => {
+        headers.set("Content-Type", "application/json");
+        console.log(err);
+      });
+  }
+}

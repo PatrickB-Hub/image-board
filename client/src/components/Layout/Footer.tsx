@@ -1,6 +1,8 @@
 import React from "react";
 import { Box, AppBar, Toolbar, makeStyles } from "@material-ui/core";
 
+import AddPost from "../Post/AddPost";
+
 const useStyles = makeStyles({
   root: {
     margin: 20,
@@ -23,22 +25,25 @@ const Footer = () => {
   const classes = useStyles();
 
   return (
-    <Box className={classes.root} boxShadow={3}>
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <span>
-            Made with{" "}
-            <span role="img" aria-label="coffee">
-              ☕
-            </span>{" "}
-            by{" "}
-            <a className={classes.link} href="https://patrickbecker.me">
-              Patrick Becker
-            </a>
-          </span>
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <>
+      <AddPost />
+      <Box className={classes.root} boxShadow={3}>
+        <AppBar position="fixed" className={classes.appBar}>
+          <Toolbar>
+            <span>
+              Made with{" "}
+              <span role="img" aria-label="coffee">
+                ☕
+              </span>{" "}
+              by{" "}
+              <a className={classes.link} href="https://patrickbecker.me">
+                Patrick Becker
+              </a>
+            </span>
+          </Toolbar>
+        </AppBar>
+      </Box>
+    </>
   );
 };
 
