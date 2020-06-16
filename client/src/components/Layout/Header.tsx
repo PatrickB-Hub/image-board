@@ -15,7 +15,7 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import { AccountCircle, MoreVert } from "@material-ui/icons";
-import { blue } from "@material-ui/core/colors";
+import { indigo } from "@material-ui/core/colors";
 
 import { logoutUser } from "../../actions/userActions";
 import { AppState } from "../../store/configureStore";
@@ -40,10 +40,10 @@ const useStyles = makeStyles({
 const ColorButton = withStyles((theme: Theme) => ({
   root: {
     margin: theme.spacing(1),
-    color: theme.palette.getContrastText(blue[900]),
-    backgroundColor: blue[900],
+    color: theme.palette.getContrastText(indigo[700]),
+    backgroundColor: indigo[700],
     "&:hover": {
-      backgroundColor: blue[800],
+      backgroundColor: indigo[800],
     },
   },
 }))(Button);
@@ -73,12 +73,12 @@ const Header: React.FC<Props> = ({ logoutUser, isAuthenticated }) => {
   const guestLinks = (
     <div>
       <Link to="/image-board/register">
-        <ColorButton variant="contained" color="primary">
+        <ColorButton variant="contained">
           Sign Up
         </ColorButton>
       </Link>
       <Link to="/image-board/login">
-        <ColorButton variant="contained" color="primary">
+        <ColorButton variant="contained">
           Log In
         </ColorButton>
       </Link>
@@ -122,6 +122,9 @@ const Header: React.FC<Props> = ({ logoutUser, isAuthenticated }) => {
     <div className={classes.root}>
       <AppBar color="primary" position="static">
         <Toolbar className={classes.space}>
+          <Link to="/image-board" className={classes.logo}>
+            <img alt="logo" src="camera_logo.png" style={{ width: 40 }} />
+          </Link>
           {isAuthenticated ? authLinks : guestLinks}
         </Toolbar>
       </AppBar>
