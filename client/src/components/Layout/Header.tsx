@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import { bindActionCreators } from "redux";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { ThunkDispatch } from "redux-thunk";
 import {
   AppBar,
   Toolbar,
@@ -8,7 +11,13 @@ import {
   Menu,
   MenuItem,
 } from "@material-ui/core";
-import { MoreVert } from "@material-ui/icons";
+import { AccountCircle, MoreVert } from "@material-ui/icons";
+
+import { logoutUser } from "../../actions/userActions";
+import { AppState } from "../../store/configureStore";
+
+import { User } from "../../types/User";
+import { AppActions } from "../../types/actions";
 
 const useStyles = makeStyles({
   root: {
@@ -24,7 +33,9 @@ const useStyles = makeStyles({
   },
 });
 
-const Header: React.FC = () => {
+type Props = LinkStateProps & LinkDispatchProps;
+
+const Header: React.FC<Props> = ({ logoutUser, isAuthenticated }) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState<
@@ -36,6 +47,11 @@ const Header: React.FC = () => {
   };
 
   const handleClose = () => setAnchorEl(null);
+
+  const handleLogout = () => {
+    setAnchorEl(null);
+    logoutUser();
+  };
 
   const open = Boolean(anchorEl);
 
@@ -73,13 +89,68 @@ const Header: React.FC = () => {
     </div>
   );
 
+  const authLinks = (
+    <div>
+      <IconButton
+        aria-owns={open ? "menu-appbar" : undefined}
+        aria-haspopup="true"
+        color="inherit"
+        onClick={handleMenu}
+      >
+        <AccountCircle />
+      </IconButton>
+      <Menu
+        id="menu-appbar"
+        open={open}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+      >
+        <MenuItem>
+          <Link to="/image-board/" onClick={handleLogout}>
+            Log Out
+          </Link>
+        </MenuItem>
+      </Menu>
+    </div>
+  );
+
   return (
     <div className={classes.root}>
       <AppBar color="primary" position="static">
-        <Toolbar className={classes.space}>{guestLinks}</Toolbar>
+        <Toolbar className={classes.space}>
+          {isAuthenticated ? authLinks : guestLinks}
+        </Toolbar>
       </AppBar>
     </div>
   );
 };
 
-export default Header;
+interface LinkStateProps {
+  isAuthenticated: boolean;
+  user: User;
+}
+
+interface LinkDispatchProps {
+  logoutUser: () => void;
+}
+
+const mapStateToProps = (state: AppState): LinkStateProps => ({
+  isAuthenticated: state.user.isAuthenticated,
+  user: state.user.user,
+});
+
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<any, any, AppActions>
+): LinkDispatchProps => ({
+  logoutUser: bindActionCreators(logoutUser, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

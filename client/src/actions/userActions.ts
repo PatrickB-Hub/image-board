@@ -58,6 +58,17 @@ export const loginUser = (userData: User) => (dispatch: Dispatch<AppActions>) =>
 }
 
 
+export const logoutUser = () => (dispatch: Dispatch<AppActions>) => {
+	localStorage.removeItem("jwt");
+	headers.delete("Authorization");
+	dispatch({
+		type: SET_USER,
+		user: {}
+	});
+	window.location.href = "/image-board/";
+}
+
+
 export const setUser = () => (dispatch: Dispatch<AppActions>) => {
   useFetch("GET", API_URL + "/users")
     .then(data => {
