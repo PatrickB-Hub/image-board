@@ -4,14 +4,18 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import {
+  Button,
   AppBar,
   Toolbar,
   makeStyles,
+  withStyles,
+  Theme,
   IconButton,
   Menu,
   MenuItem,
 } from "@material-ui/core";
 import { AccountCircle, MoreVert } from "@material-ui/icons";
+import { blue } from "@material-ui/core/colors";
 
 import { logoutUser } from "../../actions/userActions";
 import { AppState } from "../../store/configureStore";
@@ -32,6 +36,17 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
   },
 });
+
+const ColorButton = withStyles((theme: Theme) => ({
+  root: {
+    margin: theme.spacing(1),
+    color: theme.palette.getContrastText(blue[900]),
+    backgroundColor: blue[900],
+    "&:hover": {
+      backgroundColor: blue[800],
+    },
+  },
+}))(Button);
 
 type Props = LinkStateProps & LinkDispatchProps;
 
@@ -57,35 +72,16 @@ const Header: React.FC<Props> = ({ logoutUser, isAuthenticated }) => {
 
   const guestLinks = (
     <div>
-      <IconButton
-        aria-owns={open ? "menu-appbar" : undefined}
-        aria-haspopup="true"
-        color="inherit"
-        onClick={handleMenu}
-      >
-        <MoreVert />
-      </IconButton>
-      <Menu
-        id="menu-appbar"
-        open={open}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={handleClose}>
-          <Link to="/image-board/login">Log In</Link>
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Link to="/image-board/register">Sign Up</Link>
-        </MenuItem>
-      </Menu>
+      <Link to="/image-board/register">
+        <ColorButton variant="contained" color="primary">
+          Sign Up
+        </ColorButton>
+      </Link>
+      <Link to="/image-board/login">
+        <ColorButton variant="contained" color="primary">
+          Log In
+        </ColorButton>
+      </Link>
     </div>
   );
 
