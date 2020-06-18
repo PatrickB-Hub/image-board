@@ -1,7 +1,9 @@
 import { Post } from "../types/Post";
 import {
   PostActionTypes,
-  ADD_POST
+  ADD_POST,
+  GET_POSTS,
+  LOADING_POSTS
 } from "../types/actions/PostActions";
 
 interface PostState {
@@ -24,6 +26,18 @@ const postReducer = (
       return {
         posts: [action.post, ...state.posts],
         loading: false
+      };
+
+    case GET_POSTS:
+      return {
+        posts: action.posts,
+        loading: false,
+      };
+
+    case LOADING_POSTS:
+      return {
+        ...state,
+        loading: true
       };
 
     default:

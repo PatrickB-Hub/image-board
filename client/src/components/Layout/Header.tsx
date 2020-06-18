@@ -14,7 +14,7 @@ import {
   Menu,
   MenuItem,
 } from "@material-ui/core";
-import { AccountCircle, MoreVert } from "@material-ui/icons";
+import { AccountCircle } from "@material-ui/icons";
 import { indigo } from "@material-ui/core/colors";
 
 import { logoutUser } from "../../actions/userActions";

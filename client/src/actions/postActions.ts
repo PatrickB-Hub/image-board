@@ -1,7 +1,11 @@
 import { Dispatch } from "redux";
 
 import { Post } from "../types/Post";
-import { ADD_POST } from "../types/actions/PostActions";
+import {
+  ADD_POST,
+  GET_POSTS,
+  LOADING_POSTS
+} from "../types/actions/PostActions";
 
 import { AppActions } from "../types/actions";
 
@@ -31,5 +35,22 @@ export const addPost = (postData: Post) => (dispatch: Dispatch<AppActions>) => {
         headers.set("Content-Type", "application/json");
         console.log(err);
       });
+  }
+}
+
+export const getPosts = () => (dispatch: Dispatch<AppActions>) => {
+  dispatch(loadingPosts());
+
+  useFetch("GET", API_URL + "/posts")
+    .then(data => dispatch({
+      type: GET_POSTS,
+      posts: data.posts
+    }))
+    .catch(err => console.log(err));
+}
+
+export const loadingPosts = (): AppActions => {
+  return {
+    type: LOADING_POSTS
   }
 }
