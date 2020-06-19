@@ -4,7 +4,8 @@ import { Post } from "../types/Post";
 import {
   ADD_POST,
   GET_POSTS,
-  LOADING_POSTS
+  LOADING_POSTS,
+  UPDATE_POST
 } from "../types/actions/PostActions";
 
 import { AppActions } from "../types/actions";
@@ -53,4 +54,13 @@ export const loadingPosts = (): AppActions => {
   return {
     type: LOADING_POSTS
   }
+}
+
+export const updatePostRating = (postData: { _id: string, rating: number }) => (dispatch: Dispatch<AppActions>) => {
+  useFetch("PUT", API_URL + "/posts/rating", postData)
+    .then(data => dispatch({
+      type: UPDATE_POST,
+      post: data.post
+    }))
+    .catch(err => console.log(err));
 }

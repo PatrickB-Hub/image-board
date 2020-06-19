@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useRef } from "react";
+import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import { ThunkDispatch } from "redux-thunk";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
@@ -9,17 +11,30 @@ import {
   CardHeader,
   CardMedia,
   CardContent,
+  CardActions,
   Avatar,
   Typography,
+  Button,
+  Popper,
+  Grow,
   Grid,
+  Paper,
+  ClickAwayListener,
+  MenuList,
+  MenuItem,
 } from "@material-ui/core";
+import { Rating } from "@material-ui/lab";
 import CameraAlt from "@material-ui/icons/CameraAlt";
 import Location from "@material-ui/icons/LocationOn";
+import StarBorder from "@material-ui/icons/StarBorder";
+import Star from "@material-ui/icons/Star";
 
+import { updatePostRating } from "../../actions/postActions";
 import { AppState } from "../../store/configureStore";
 
 import { Post } from "../../types/Post";
 import { User } from "../../types/User";
+import { AppActions } from "../../types/actions";
 
 import { API_URL } from "../../utils/useFetch";
 
@@ -65,6 +80,32 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingLeft: 15,
       paddingRight: 15,
     },
+    expand: {
+      transform: "rotate(0deg)",
+      marginLeft: "auto",
+      transition: theme.transitions.create("transform", {
+        duration: theme.transitions.duration.shortest,
+      }),
+    },
+    expandOpen: {
+      transform: "rotate(180deg)",
+    },
+    commentContainer: {
+      display: "flex",
+      backgroundColor: "#fff",
+      padding: "10px 2px 5px 10px",
+      borderRadius: 5,
+      marginTop: 20,
+      boxShadow:
+        "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
+    },
+    comments: {
+      paddingTop: 0,
+    },
+    commentInput: {
+      width: "100%",
+      marginBottom: 5,
+    },
   })
 );
 
@@ -72,14 +113,45 @@ interface SinglePostProps {
   post: Post;
 }
 
-type Props = SinglePostProps;
+type Props = SinglePostProps & LinkStateProps & LinkDispatchProps;
 
-const SinglePost: React.FC<Props> = ({ post }) => {
+const SinglePost: React.FC<Props> = ({ post, updatePostRating }) => {
   const classes = useStyles();
 
-  const { camera, location, description, filePath, createdAt } = post;
+  const { camera, location, description, filePath, rating, createdAt } = post;
+  const { _id } = post;
   const username = post?.user?.username;
   const postUserId = post?.user?._id;
+
+  const [postRating, setPostRating] = useState<number | null>(
+    rating ? rating.overallRating : null
+  );
+  const [open, setOpen] = useState(false);
+
+  const anchorRef = useRef<HTMLButtonElement>(null);
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (e: React.MouseEvent<EventTarget>) => {
+    if (
+      anchorRef.current &&
+      anchorRef.current.contains(e.target as HTMLElement)
+    )
+      return;
+
+    setOpen(false);
+  };
+
+  const handleRatingChange = (
+    _e: React.ChangeEvent<{}>,
+    newRating: number | null
+  ) => {
+    setPostRating(newRating);
+
+    if (_id && newRating !== null) updatePostRating({ _id, rating: newRating });
+  };
 
   return (
     <Grid item xs={12} sm={10} md={6} lg={4} className={classes.item}>
@@ -156,6 +228,61 @@ const SinglePost: React.FC<Props> = ({ post }) => {
           </Typography>
         </CardContent>
         <div style={{ height: "1px", backgroundColor: "#999" }} />
+
+        {/* overall rating and rating input */}
+        <CardActions disableSpacing className={classes.cardDropdown}>
+          <Tooltip
+            title={`${rating?.overallRating?.toFixed(1)} based on 
+                    ${rating?.totalRating} user ratings`}
+          >
+            <Star style={{ color: "gold", marginRight: 3 }} />
+          </Tooltip>
+          {rating?.overallRating?.toFixed(1)}
+          <Tooltip title="Rate this post">
+            <Button
+              ref={anchorRef}
+              aria-controls={open ? "menu-list-grow" : undefined}
+              aria-haspopup="true"
+              style={{ marginLeft: 10 }}
+              onClick={handleToggle}
+              startIcon={<StarBorder />}
+            >
+              Rate post
+            </Button>
+          </Tooltip>
+          <Popper
+            open={open}
+            anchorEl={anchorRef.current}
+            role={undefined}
+            transition
+            disablePortal
+          >
+            {({ TransitionProps, placement }) => (
+              <Grow
+                {...TransitionProps}
+                style={{
+                  transformOrigin:
+                    placement === "bottom" ? "center top" : "center bottom",
+                }}
+              >
+                <Paper>
+                  <ClickAwayListener onClickAway={handleClose}>
+                    <MenuList autoFocusItem={open} id="menu-list-grow">
+                      <MenuItem onClick={handleClose}>
+                        <Rating
+                          max={10}
+                          name="post-rating"
+                          value={postRating}
+                          onChange={handleRatingChange}
+                        />
+                      </MenuItem>
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Grow>
+            )}
+          </Popper>
+        </CardActions>
       </Card>
     </Grid>
   );
@@ -166,9 +293,19 @@ interface LinkStateProps {
   user: User;
 }
 
+interface LinkDispatchProps {
+  updatePostRating: (postData: { _id: string; rating: number }) => void;
+}
+
 const mapStateToProps = (state: AppState): LinkStateProps => ({
   isAuthenticated: state.user.isAuthenticated,
   user: state.user.user,
 });
 
-export default connect(mapStateToProps)(SinglePost);
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<any, any, AppActions>
+): LinkDispatchProps => ({
+  updatePostRating: bindActionCreators(updatePostRating, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SinglePost);

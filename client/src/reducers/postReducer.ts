@@ -3,7 +3,8 @@ import {
   PostActionTypes,
   ADD_POST,
   GET_POSTS,
-  LOADING_POSTS
+  LOADING_POSTS,
+  UPDATE_POST
 } from "../types/actions/PostActions";
 
 interface PostState {
@@ -38,6 +39,17 @@ const postReducer = (
       return {
         ...state,
         loading: true
+      };
+
+    case UPDATE_POST:
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (post._id === action.post._id)
+            return action.post;
+          else
+            return post;
+        }),
       };
 
     default:
