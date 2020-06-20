@@ -1,11 +1,13 @@
 import { Dispatch } from "redux";
 
 import { Post } from "../types/Post";
+import { Comment } from "../types/Comment";
 import {
   ADD_POST,
   GET_POSTS,
   LOADING_POSTS,
-  UPDATE_POST
+  UPDATE_POST,
+  ADD_COMMENT
 } from "../types/actions/PostActions";
 
 import { AppActions } from "../types/actions";
@@ -61,6 +63,15 @@ export const updatePostRating = (postData: { _id: string, rating: number }) => (
     .then(data => dispatch({
       type: UPDATE_POST,
       post: data.post
+    }))
+    .catch(err => console.log(err));
+}
+
+export const addComment = (commentData: Comment) => (dispatch: Dispatch<AppActions>) => {
+  useFetch("POST", API_URL + "/posts/comment", commentData)
+    .then(data => dispatch({
+      type: ADD_COMMENT,
+      comment: data.comment
     }))
     .catch(err => console.log(err));
 }

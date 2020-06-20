@@ -4,7 +4,8 @@ import {
   ADD_POST,
   GET_POSTS,
   LOADING_POSTS,
-  UPDATE_POST
+  UPDATE_POST,
+  ADD_COMMENT
 } from "../types/actions/PostActions";
 
 interface PostState {
@@ -48,6 +49,18 @@ const postReducer = (
           if (post._id === action.post._id)
             return action.post;
           else
+            return post;
+        }),
+      };
+
+    case ADD_COMMENT:
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (post._id === action.comment.postId) {
+            const comments = post.comments || [];
+            return { ...post, comments: [...comments, action.comment] };
+          } else
             return post;
         }),
       };

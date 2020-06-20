@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import clsx from "clsx";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import {
   Tooltip,
@@ -12,7 +13,10 @@ import {
   CardMedia,
   CardContent,
   CardActions,
+  Collapse,
   Avatar,
+  TextField,
+  IconButton,
   Typography,
   Button,
   Popper,
@@ -23,17 +27,22 @@ import {
   MenuList,
   MenuItem,
 } from "@material-ui/core";
-import { Rating } from "@material-ui/lab";
+import Rating from "@material-ui/lab/Rating";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CameraAlt from "@material-ui/icons/CameraAlt";
 import Location from "@material-ui/icons/LocationOn";
 import StarBorder from "@material-ui/icons/StarBorder";
 import Star from "@material-ui/icons/Star";
+import Send from "@material-ui/icons/Send";
 
-import { updatePostRating } from "../../actions/postActions";
+import SingleComment from "./Comment";
+
+import { updatePostRating, addComment } from "../../actions/postActions";
 import { AppState } from "../../store/configureStore";
 
 import { Post } from "../../types/Post";
 import { User } from "../../types/User";
+import { Comment } from "../../types/Comment";
 import { AppActions } from "../../types/actions";
 
 import { API_URL } from "../../utils/useFetch";
@@ -115,10 +124,23 @@ interface SinglePostProps {
 
 type Props = SinglePostProps & LinkStateProps & LinkDispatchProps;
 
-const SinglePost: React.FC<Props> = ({ post, updatePostRating }) => {
+const SinglePost: React.FC<Props> = ({
+  user,
+  post,
+  updatePostRating,
+  addComment,
+}) => {
   const classes = useStyles();
 
-  const { camera, location, description, filePath, rating, createdAt } = post;
+  const {
+    camera,
+    location,
+    description,
+    filePath,
+    rating,
+    comments,
+    createdAt,
+  } = post;
   const { _id } = post;
   const username = post?.user?.username;
   const postUserId = post?.user?._id;
@@ -126,7 +148,9 @@ const SinglePost: React.FC<Props> = ({ post, updatePostRating }) => {
   const [postRating, setPostRating] = useState<number | null>(
     rating ? rating.overallRating : null
   );
+  const [expanded, setExpanded] = useState(false);
   const [open, setOpen] = useState(false);
+  const [commentInput, setCommentInput] = useState("");
 
   const anchorRef = useRef<HTMLButtonElement>(null);
 
@@ -151,6 +175,26 @@ const SinglePost: React.FC<Props> = ({ post, updatePostRating }) => {
     setPostRating(newRating);
 
     if (_id && newRating !== null) updatePostRating({ _id, rating: newRating });
+  };
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCommentInput(e.target.value);
+  };
+
+  const handleCommentSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    addComment({
+      postId: _id,
+      user,
+      message: commentInput,
+      createdAt: new Date(),
+    });
+    setCommentInput("");
   };
 
   return (
@@ -282,7 +326,55 @@ const SinglePost: React.FC<Props> = ({ post, updatePostRating }) => {
               </Grow>
             )}
           </Popper>
+          <Tooltip title="Show and add comments">
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          </Tooltip>
         </CardActions>
+
+        {/* Dropdown with comment section */}
+        <Collapse
+          in={expanded}
+          timeout="auto"
+          unmountOnExit
+          className={classes.cardContent}
+        >
+          <CardContent className={classes.comments}>
+            {/* render comments */}
+            {comments?.map((comment, idx) => (
+              <SingleComment key={idx} comment={comment} />
+            ))}
+
+            {/* comment form with input field */}
+            <form onSubmit={handleCommentSubmit}>
+              <div className={classes.commentContainer}>
+                <TextField
+                  autoFocus
+                  multiline
+                  label="Leave a comment"
+                  type="text"
+                  name="comment"
+                  rowsMax="4"
+                  className={classes.commentInput}
+                  id="input-comment"
+                  onChange={handleInputChange}
+                  value={commentInput}
+                />
+                <IconButton type="submit" aria-label="submit">
+                  <Send />
+                </IconButton>
+              </div>
+            </form>
+          </CardContent>
+        </Collapse>
       </Card>
     </Grid>
   );
@@ -295,6 +387,7 @@ interface LinkStateProps {
 
 interface LinkDispatchProps {
   updatePostRating: (postData: { _id: string; rating: number }) => void;
+  addComment: (commentData: Comment) => void;
 }
 
 const mapStateToProps = (state: AppState): LinkStateProps => ({
@@ -306,6 +399,7 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AppActions>
 ): LinkDispatchProps => ({
   updatePostRating: bindActionCreators(updatePostRating, dispatch),
+  addComment: bindActionCreators(addComment, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SinglePost);
