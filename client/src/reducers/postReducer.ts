@@ -5,6 +5,7 @@ import {
   GET_POSTS,
   LOADING_POSTS,
   UPDATE_POST,
+  DELETE_POST,
   ADD_COMMENT
 } from "../types/actions/PostActions";
 
@@ -51,6 +52,12 @@ const postReducer = (
           else
             return post;
         }),
+      };
+
+    case DELETE_POST:
+      return {
+        ...state,
+        posts: state.posts.filter(post => post._id !== action.id),
       };
 
     case ADD_COMMENT:

@@ -7,7 +7,8 @@ import {
   GET_POSTS,
   LOADING_POSTS,
   UPDATE_POST,
-  ADD_COMMENT
+  ADD_COMMENT,
+  DELETE_POST
 } from "../types/actions/PostActions";
 
 import { AppActions } from "../types/actions";
@@ -50,6 +51,15 @@ export const getPosts = () => (dispatch: Dispatch<AppActions>) => {
       posts: data.posts
     }))
     .catch(err => console.log(err));
+}
+
+export const deletePost = (postId: string) => (dispatch: Dispatch<AppActions>) => {
+	useFetch("DELETE", API_URL + "/posts/delete", { postId })
+		.then(data => dispatch({
+			type: DELETE_POST,
+			id: data.post._id
+		}))
+		.catch(err => console.log(err));
 }
 
 export const loadingPosts = (): AppActions => {

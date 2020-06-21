@@ -5,6 +5,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import clsx from "clsx";
+import { useConfirm } from "material-ui-confirm";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import {
   Tooltip,
@@ -32,18 +33,23 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CameraAlt from "@material-ui/icons/CameraAlt";
 import Location from "@material-ui/icons/LocationOn";
 import StarBorder from "@material-ui/icons/StarBorder";
+import DeleteIcon from "@material-ui/icons/Delete";
 import Star from "@material-ui/icons/Star";
 import Send from "@material-ui/icons/Send";
 
 import SingleComment from "./Comment";
 
-import { updatePostRating, addComment } from "../../actions/postActions";
+import {
+  updatePostRating,
+  deletePost,
+  addComment,
+} from "../../actions/postActions";
 import { AppState } from "../../store/configureStore";
 
 import { Post } from "../../types/Post";
 import { User } from "../../types/User";
-import { Comment } from "../../types/Comment";
 import { AppActions } from "../../types/actions";
+import { Comment } from "../../types/Comment";
 
 import { API_URL } from "../../utils/useFetch";
 
@@ -125,11 +131,14 @@ interface SinglePostProps {
 type Props = SinglePostProps & LinkStateProps & LinkDispatchProps;
 
 const SinglePost: React.FC<Props> = ({
+  isAuthenticated,
   user,
   post,
   updatePostRating,
+  deletePost,
   addComment,
 }) => {
+  const confirm = useConfirm();
   const classes = useStyles();
 
   const {
@@ -144,6 +153,7 @@ const SinglePost: React.FC<Props> = ({
   const { _id } = post;
   const username = post?.user?.username;
   const postUserId = post?.user?._id;
+  const currentUserId = user._id;
 
   const [postRating, setPostRating] = useState<number | null>(
     rating ? rating.overallRating : null
@@ -153,6 +163,14 @@ const SinglePost: React.FC<Props> = ({
   const [commentInput, setCommentInput] = useState("");
 
   const anchorRef = useRef<HTMLButtonElement>(null);
+
+  const handleDelete = (
+    _e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    confirm({ description: "This will permanently delete your post." })
+      .then(() => _id && deletePost(_id))
+      .catch(() => console.log("Deletion cancelled."));
+  };
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -197,6 +215,16 @@ const SinglePost: React.FC<Props> = ({
     setCommentInput("");
   };
 
+  const deleteBtn = (
+    <div style={{ margin: "15px 10px 10px 0" }}>
+      <Tooltip title="Delete post">
+        <IconButton size="small" aria-label="delete" onClick={handleDelete}>
+          <DeleteIcon style={{ margin: 4 }} />
+        </IconButton>
+      </Tooltip>
+    </div>
+  );
+
   return (
     <Grid item xs={12} sm={10} md={6} lg={4} className={classes.item}>
       <Card className={classes.root}>
@@ -219,6 +247,7 @@ const SinglePost: React.FC<Props> = ({
               {username?.substr(0, 1)}
             </Avatar>
           }
+          action={isAuthenticated && postUserId === currentUserId && deleteBtn}
           title={
             <h3 className={classes.userProfile}>
               <Link
@@ -387,6 +416,7 @@ interface LinkStateProps {
 
 interface LinkDispatchProps {
   updatePostRating: (postData: { _id: string; rating: number }) => void;
+  deletePost: (postId: string) => void;
   addComment: (commentData: Comment) => void;
 }
 
@@ -399,6 +429,7 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AppActions>
 ): LinkDispatchProps => ({
   updatePostRating: bindActionCreators(updatePostRating, dispatch),
+  deletePost: bindActionCreators(deletePost, dispatch),
   addComment: bindActionCreators(addComment, dispatch),
 });
 
