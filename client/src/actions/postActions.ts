@@ -42,10 +42,12 @@ export const addPost = (postData: Post) => (dispatch: Dispatch<AppActions>) => {
   }
 }
 
-export const getPosts = () => (dispatch: Dispatch<AppActions>) => {
+export const getPosts = (userId?: string) => (dispatch: Dispatch<AppActions>) => {
   dispatch(loadingPosts());
 
-  useFetch("GET", API_URL + "/posts")
+  const url = API_URL.concat("/posts", userId ? `/${userId}` : "");
+
+  useFetch("GET", url)
     .then(data => dispatch({
       type: GET_POSTS,
       posts: data.posts
@@ -54,12 +56,12 @@ export const getPosts = () => (dispatch: Dispatch<AppActions>) => {
 }
 
 export const deletePost = (postId: string) => (dispatch: Dispatch<AppActions>) => {
-	useFetch("DELETE", API_URL + "/posts/delete", { postId })
-		.then(data => dispatch({
-			type: DELETE_POST,
-			id: data.post._id
-		}))
-		.catch(err => console.log(err));
+  useFetch("DELETE", API_URL + "/posts/delete", { postId })
+    .then(data => dispatch({
+      type: DELETE_POST,
+      id: data.post._id
+    }))
+    .catch(err => console.log(err));
 }
 
 export const loadingPosts = (): AppActions => {
