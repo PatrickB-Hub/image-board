@@ -2,7 +2,9 @@ import { Dispatch } from "redux";
 
 import {
   GET_PROFILE,
-  LOADING_PROFILE
+  LOADING_PROFILE,
+  FOLLOW_PROFILE,
+  UNFOLLOW_PROFILE
 } from "../types/actions/ProfileActions";
 import { AppActions } from "../types/actions";
 
@@ -25,4 +27,22 @@ export const loadingProfile = (): AppActions => {
   return {
     type: LOADING_PROFILE
   };
+}
+
+export const followProfile = (profileId: string) => (dispatch: Dispatch<AppActions>) => {
+  useFetch("POST", API_URL + "/users/follow", { profileId })
+    .then(data => dispatch({
+      type: FOLLOW_PROFILE,
+      id: data.userId
+    }))
+    .catch(err => console.log(err));
+}
+
+export const unfollowProfile = (profileId: string) => (dispatch: Dispatch<AppActions>) => {
+  useFetch("POST", API_URL + "/users/unfollow", { profileId })
+    .then(data => dispatch({
+      type: UNFOLLOW_PROFILE,
+      id: data.userId
+    }))
+    .catch(err => console.log(err));
 }

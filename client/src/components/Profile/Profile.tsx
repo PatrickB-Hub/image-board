@@ -3,12 +3,16 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { useParams } from "react-router";
-import { Paper, Avatar, makeStyles, Grid } from "@material-ui/core";
+import { Paper, Button, Avatar, makeStyles, Grid } from "@material-ui/core";
 
 import SinglePost from "../Post/Post";
 import LoadingPosts from "../Post/LoadingPosts";
 
-import { getProfile } from "../../actions/profileActions";
+import {
+  getProfile,
+  followProfile,
+  unfollowProfile,
+} from "../../actions/profileActions";
 import { getPosts } from "../../actions/postActions";
 import { AppState } from "../../store/configureStore";
 
@@ -45,6 +49,20 @@ const useStyles = makeStyles({
     fontSize: 14,
     fontWeight: "normal",
   },
+  btnBlock: {
+    marginTop: 5,
+    marginBottom: 20,
+  },
+  btnFollow: {
+    outline: "none",
+    backgroundColor: "#3F51B5",
+    color: "white",
+    "&:hover": {
+      color: "#3F51B5",
+      borderColor: "#3F51B5",
+      backgroundColor: "white",
+    },
+  },
   loader: {
     alignSelf: "center",
   },
@@ -58,19 +76,32 @@ type Props = LinkStateProps & LinkDispatchProps;
 
 const Profile: React.FC<Props> = ({
   profile,
+  user,
   posts,
   loadingProfile,
   loadingPosts,
+  isAuthenticated,
   getProfile,
   getPosts,
+  followProfile,
+  unfollowProfile,
 }) => {
   const classes = useStyles();
   const { userId } = useParams<{ userId: string }>();
+  const { _id } = user;
 
   useEffect(() => {
     getPosts(userId);
     getProfile(userId);
   }, [userId, getPosts, getProfile]);
+
+  const handleFollow = () => {
+    userId && followProfile(userId);
+  };
+
+  const handleUnfollow = () => {
+    userId && unfollowProfile(userId);
+  };
 
   let items =
     posts && posts.map((post) => <SinglePost key={post._id} post={post} />);
@@ -79,6 +110,38 @@ const Profile: React.FC<Props> = ({
 
   if (profile && items) {
     const { email, username, followers, following } = profile;
+
+    let followBtns;
+
+    if (isAuthenticated) {
+      if (_id && followers && !followers.includes(_id)) {
+        followBtns = (
+          <div className={classes.btnBlock}>
+            <Button
+              size="small"
+              variant="outlined"
+              className={classes.btnFollow}
+              onClick={handleFollow}
+            >
+              Follow
+            </Button>
+          </div>
+        );
+      } else {
+        followBtns = (
+          <div className={classes.btnBlock}>
+            <Button
+              size="small"
+              variant="outlined"
+              className={classes.btnFollow}
+              onClick={handleUnfollow}
+            >
+              Unfollow
+            </Button>
+          </div>
+        );
+      }
+    }
 
     profileInfo = (
       <Paper className={classes.paper}>
@@ -94,6 +157,7 @@ const Profile: React.FC<Props> = ({
           {username?.substr(0, 2)}
         </Avatar>
         <h2 className={classes.username}>{username}</h2>
+        {userId !== _id && followBtns}
         <div className={classes.email}>{email}</div>
         <div style={{ height: "1px", backgroundColor: "#999" }} />
         <div className={classes.detailsBlock}>
@@ -116,6 +180,7 @@ const Profile: React.FC<Props> = ({
 
   return (
     <Grid container direction="column">
+      {/* alignItems="center" */}
       <Grid item>{!loadingProfile && profileInfo}</Grid>
       <Grid container justify="space-evenly" alignContent="center" spacing={3}>
         {loadingPosts ? <LoadingPosts /> : items}
@@ -136,6 +201,8 @@ interface LinkStateProps {
 interface LinkDispatchProps {
   getProfile: (userId: string) => void;
   getPosts: (userId: string) => void;
+  followProfile: (userId: string) => void;
+  unfollowProfile: (userId: string) => void;
 }
 
 const mapStateToProps = (state: AppState): LinkStateProps => ({
@@ -152,6 +219,8 @@ const mapDispatchToProps = (
 ): LinkDispatchProps => ({
   getProfile: bindActionCreators(getProfile, dispatch),
   getPosts: bindActionCreators(getPosts, dispatch),
+  followProfile: bindActionCreators(followProfile, dispatch),
+  unfollowProfile: bindActionCreators(unfollowProfile, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

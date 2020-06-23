@@ -2,7 +2,9 @@ import { User } from "../types/User";
 import {
   ProfileActionTypes,
   GET_PROFILE,
-  LOADING_PROFILE
+  LOADING_PROFILE,
+  FOLLOW_PROFILE,
+  UNFOLLOW_PROFILE,
 } from "../types/actions/ProfileActions";
 
 interface ProfileState {
@@ -31,6 +33,25 @@ const profileReducer = (
       return {
         ...state,
         loading: true
+      };
+
+    case FOLLOW_PROFILE:
+      const followers = state.user.followers || [];
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          followers: [...followers, action.id]
+        },
+      };
+
+    case UNFOLLOW_PROFILE:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          followers: state.user.followers ? state.user.followers.filter((userId: string) => userId !== action.id) : []
+        }
       };
 
     default:
