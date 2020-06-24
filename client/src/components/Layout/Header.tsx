@@ -50,7 +50,7 @@ const ColorButton = withStyles((theme: Theme) => ({
 
 type Props = LinkStateProps & LinkDispatchProps;
 
-const Header: React.FC<Props> = ({ logoutUser, isAuthenticated }) => {
+const Header: React.FC<Props> = ({ logoutUser, isAuthenticated, user }) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState<
@@ -73,14 +73,10 @@ const Header: React.FC<Props> = ({ logoutUser, isAuthenticated }) => {
   const guestLinks = (
     <div>
       <Link to="/image-board/register">
-        <ColorButton variant="contained">
-          Sign Up
-        </ColorButton>
+        <ColorButton variant="contained">Sign Up</ColorButton>
       </Link>
       <Link to="/image-board/login">
-        <ColorButton variant="contained">
-          Log In
-        </ColorButton>
+        <ColorButton variant="contained">Log In</ColorButton>
       </Link>
     </div>
   );
@@ -109,6 +105,9 @@ const Header: React.FC<Props> = ({ logoutUser, isAuthenticated }) => {
         anchorEl={anchorEl}
         onClose={handleClose}
       >
+        <MenuItem onClick={handleClose}>
+          <Link to={`/image-board/profile/${user._id}`}>Profile</Link>
+        </MenuItem>
         <MenuItem>
           <Link to="/image-board/" onClick={handleLogout}>
             Log Out

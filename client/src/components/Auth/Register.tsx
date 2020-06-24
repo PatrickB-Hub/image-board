@@ -57,56 +57,58 @@ const Register: React.FC<Props> = ({ registerUser, errors }) => {
   };
 
   return (
-    <Paper className={classes.paper}>
-      <h2 className={classes.title}>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          type="email"
-          label="Email"
-          className={classes.textField}
-          value={registerInfo.email}
-          onChange={handleChange}
-          name="email"
-          helperText={errors.email ? errors.email : ""}
-          error={errors.email ? true : false}
-        />
-        <TextField
-          label="Username"
-          type="text"
-          name="username"
-          value={registerInfo.username}
-          onChange={handleChange}
-          className={classes.textField}
-          helperText={errors.username ? errors.username : ""}
-          error={errors.username ? true : false}
-        />
-        <TextField
-          label="Password"
-          type="password"
-          name="password"
-          value={registerInfo.password}
-          onChange={handleChange}
-          className={classes.textField}
-          helperText={errors.password ? errors.password : ""}
-          error={errors.password ? true : false}
-        />
-        <TextField
-          label="Confirm Password"
-          type="password"
-          name="confirmPassword"
-          value={registerInfo.confirmPassword}
-          onChange={handleChange}
-          className={classes.textField}
-          helperText={errors.confirmPassword ? errors.confirmPassword : ""}
-          error={errors.confirmPassword ? true : false}
-        />
-        <div className={classes.btnBlock}>
-          <Button variant="outlined" type="submit">
-            Submit
-          </Button>
-        </div>
-      </form>
-    </Paper>
+    <div>
+      <Paper className={classes.paper}>
+        <h2 className={classes.title}>Register</h2>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            type="email"
+            label="Email"
+            className={classes.textField}
+            value={registerInfo.email}
+            onChange={handleChange}
+            name="email"
+            helperText={errors.email ? errors.email : ""}
+            error={errors.email ? true : false}
+          />
+          <TextField
+            label="Username"
+            type="text"
+            name="username"
+            value={registerInfo.username}
+            onChange={handleChange}
+            className={classes.textField}
+            helperText={errors.username ? errors.username : ""}
+            error={errors.username ? true : false}
+          />
+          <TextField
+            label="Password"
+            type="password"
+            name="password"
+            value={registerInfo.password}
+            onChange={handleChange}
+            className={classes.textField}
+            helperText={errors.password ? errors.password : ""}
+            error={errors.password ? true : false}
+          />
+          <TextField
+            label="Confirm Password"
+            type="password"
+            name="confirmPassword"
+            value={registerInfo.confirmPassword}
+            onChange={handleChange}
+            className={classes.textField}
+            helperText={errors.confirmPassword ? errors.confirmPassword : ""}
+            error={errors.confirmPassword ? true : false}
+          />
+          <div className={classes.btnBlock}>
+            <Button variant="outlined" type="submit">
+              Submit
+            </Button>
+          </div>
+        </form>
+      </Paper>
+    </div>
   );
 };
 

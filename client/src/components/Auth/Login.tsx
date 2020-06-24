@@ -65,39 +65,41 @@ const Login: React.FC<Props> = ({ loginUser, isAuthenticated, errors }) => {
   };
 
   return (
-    <Paper className={classes.paper}>
-      <h2 className={classes.title}>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          type="email"
-          label="Email"
-          className={classes.textField}
-          value={loginInfo.email}
-          onChange={handleChange}
-          name="email"
-          helperText={errors.email ? errors.email : ""}
-          error={errors.email ? true : false}
-        />
-        <TextField
-          label="Password"
-          type="password"
-          name="password"
-          value={loginInfo.password}
-          onChange={handleChange}
-          className={classes.textField}
-          helperText={errors.password ? errors.password : ""}
-          error={errors.password ? true : false}
-        />
-        <div className={classes.btnBlock}>
-          <Button variant="outlined" type="submit">
-            Submit
-          </Button>
-        </div>
-      </form>
-      <p className={classes.registerLink}>
-        Not registered? <Link to="/image-board/register">Sign up now</Link>.
-      </p>
-    </Paper>
+    <div>
+      <Paper className={classes.paper}>
+        <h2 className={classes.title}>Login</h2>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            type="email"
+            label="Email"
+            className={classes.textField}
+            value={loginInfo.email}
+            onChange={handleChange}
+            name="email"
+            helperText={errors.email ? errors.email : ""}
+            error={errors.email ? true : false}
+          />
+          <TextField
+            label="Password"
+            type="password"
+            name="password"
+            value={loginInfo.password}
+            onChange={handleChange}
+            className={classes.textField}
+            helperText={errors.password ? errors.password : ""}
+            error={errors.password ? true : false}
+          />
+          <div className={classes.btnBlock}>
+            <Button variant="outlined" type="submit">
+              Submit
+            </Button>
+          </div>
+        </form>
+        <p className={classes.registerLink}>
+          Not registered? <Link to="/image-board/register">Sign up now</Link>.
+        </p>
+      </Paper>
+    </div>
   );
 };
 

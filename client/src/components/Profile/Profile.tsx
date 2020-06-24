@@ -144,37 +144,39 @@ const Profile: React.FC<Props> = ({
     }
 
     profileInfo = (
-      <Paper className={classes.paper}>
-        <Avatar
-          alt={username}
-          style={{
-            display: "inline-flex",
-            backgroundColor: `#${userId.slice(userId.length - 3)}`,
-            padding: 6,
-            fontSize: 26,
-          }}
-        >
-          {username?.substr(0, 2)}
-        </Avatar>
-        <h2 className={classes.username}>{username}</h2>
-        {userId !== _id && followBtns}
-        <div className={classes.email}>{email}</div>
-        <div style={{ height: "1px", backgroundColor: "#999" }} />
-        <div className={classes.detailsBlock}>
-          <div className={classes.detail}>
-            {items.length}
-            <span className={classes.detailTitle}>Posts</span>
+      <div>
+        <Paper className={classes.paper}>
+          <Avatar
+            alt={username}
+            style={{
+              display: "inline-flex",
+              backgroundColor: `#${userId.slice(userId.length - 3)}`,
+              padding: 6,
+              fontSize: 20,
+            }}
+          >
+            {username?.substr(0, 2)}
+          </Avatar>
+          <h2 className={classes.username}>{username}</h2>
+          {userId !== _id && followBtns}
+          <div className={classes.email}>{email}</div>
+          <div style={{ height: "1px", backgroundColor: "#999" }} />
+          <div className={classes.detailsBlock}>
+            <div className={classes.detail}>
+              {items.length}
+              <span className={classes.detailTitle}>Posts</span>
+            </div>
+            <div className={classes.detail}>
+              {followers ? followers.length : 0}
+              <span className={classes.detailTitle}>Followers</span>
+            </div>
+            <div className={classes.detail}>
+              {following ? following.length : 0}
+              <span className={classes.detailTitle}>Following</span>
+            </div>
           </div>
-          <div className={classes.detail}>
-            {followers ? followers.length : 0}
-            <span className={classes.detailTitle}>Followers</span>
-          </div>
-          <div className={classes.detail}>
-            {following ? following.length : 0}
-            <span className={classes.detailTitle}>Following</span>
-          </div>
-        </div>
-      </Paper>
+        </Paper>
+      </div>
     );
   }
 
