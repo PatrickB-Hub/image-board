@@ -109,6 +109,9 @@ const Header: React.FC<Props> = ({ logoutUser, isAuthenticated, user }) => {
           <Link to={`/image-board/profile/${user._id}`}>Profile</Link>
         </MenuItem>
         <MenuItem>
+          <Link to="/image-board/followed">Followed</Link>
+        </MenuItem>
+        <MenuItem>
           <Link to="/image-board/" onClick={handleLogout}>
             Log Out
           </Link>

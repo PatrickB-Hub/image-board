@@ -55,6 +55,15 @@ export const getPosts = (userId?: string) => (dispatch: Dispatch<AppActions>) =>
     .catch(err => console.log(err));
 }
 
+export const getPostsByFollowedUsers = () => (dispatch: Dispatch<AppActions>) => {
+  useFetch("GET", API_URL + "/posts/following")
+    .then(data => dispatch({
+      type: GET_POSTS,
+      posts: data.posts
+    }))
+    .catch(err => console.log(err));
+}
+
 export const deletePost = (postId: string) => (dispatch: Dispatch<AppActions>) => {
   useFetch("DELETE", API_URL + "/posts/delete", { postId })
     .then(data => dispatch({

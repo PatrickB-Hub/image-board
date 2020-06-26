@@ -7,18 +7,28 @@ import { Grid } from "@material-ui/core";
 import SinglePost from "./Post";
 import LoadingPosts from "./LoadingPosts";
 
-import { getPosts } from "../../actions/postActions";
+import { getPosts, getPostsByFollowedUsers } from "../../actions/postActions";
 import { AppState } from "../../store/configureStore";
 
 import { Post } from "../../types/Post";
 import { AppActions } from "../../types/actions";
 
-type Props = LinkStateProps & LinkDispatchProps;
+interface ListPostsProps {
+  allPosts: boolean;
+}
 
-const ListPosts: React.FC<Props> = ({ posts, loading, getPosts }) => {
+type Props = ListPostsProps & LinkStateProps & LinkDispatchProps;
+
+const ListPosts: React.FC<Props> = ({
+  posts,
+  loading,
+  allPosts,
+  getPosts,
+  getPostsByFollowedUsers,
+}) => {
   useEffect(() => {
-    getPosts();
-  }, [getPosts]);
+    allPosts ? getPosts() : getPostsByFollowedUsers();
+  }, [allPosts, getPosts, getPostsByFollowedUsers]);
 
   const items = posts.map((post) => <SinglePost key={post._id} post={post} />);
 
@@ -42,6 +52,7 @@ interface LinkStateProps {
 
 interface LinkDispatchProps {
   getPosts: () => void;
+  getPostsByFollowedUsers: () => void;
 }
 
 const mapStateToProps = (state: AppState): LinkStateProps => ({
@@ -53,6 +64,10 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AppActions>
 ): LinkDispatchProps => ({
   getPosts: bindActionCreators(getPosts, dispatch),
+  getPostsByFollowedUsers: bindActionCreators(
+    getPostsByFollowedUsers,
+    dispatch
+  ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListPosts);

@@ -6,12 +6,16 @@ import ListPosts from "../Post/ListPosts";
 
 import { AppState } from "../../store/configureStore";
 
-const Home: React.FC<{ isAuthenticated: boolean }> = ({ isAuthenticated }) => {
-  return <div>{isAuthenticated ? <ListPosts allPosts /> : <Login />}</div>;
+const Followed: React.FC<{ isAuthenticated: boolean }> = ({
+  isAuthenticated,
+}) => {
+  return (
+    <div>{isAuthenticated ? <ListPosts allPosts={false} /> : <Login />}</div>
+  );
 };
 
 const mapStateToProps = (state: AppState) => ({
   isAuthenticated: state.user.isAuthenticated,
 });
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(Followed);
