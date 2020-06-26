@@ -23,6 +23,17 @@ export const getProfile = (userId: string, refresh?: boolean) => (dispatch: Disp
     .catch(err => console.log(err));
 }
 
+export const searchProfile = (text: string, history: any) => (dispatch: Dispatch<AppActions>) => {
+  useFetch("POST", API_URL + "/users/search", { text })
+    .then(data => {
+      if (data.success)
+        history.push(`/image-board/profile/${data.userId}`);
+      else
+        history.push("/image-board/search");
+    })
+    .catch(_err => history.push("/image-board/search"));
+}
+
 export const loadingProfile = (): AppActions => {
   return {
     type: LOADING_PROFILE

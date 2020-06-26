@@ -17,6 +17,8 @@ import {
 import { AccountCircle } from "@material-ui/icons";
 import { indigo } from "@material-ui/core/colors";
 
+import SearchForm from "../Search/SearchForm";
+
 import { logoutUser } from "../../actions/userActions";
 import { AppState } from "../../store/configureStore";
 
@@ -127,6 +129,7 @@ const Header: React.FC<Props> = ({ logoutUser, isAuthenticated, user }) => {
           <Link to="/image-board" className={classes.logo}>
             <img alt="logo" src="camera_logo.png" style={{ width: 40 }} />
           </Link>
+          {isAuthenticated && <SearchForm />}
           {isAuthenticated ? authLinks : guestLinks}
         </Toolbar>
       </AppBar>

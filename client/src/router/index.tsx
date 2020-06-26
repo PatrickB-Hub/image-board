@@ -8,6 +8,7 @@ import NotFound from "../components/Routes/NotFound";
 import Login from "../components/Auth/Login";
 import Register from "../components/Auth/Register";
 import Profile from "../components/Profile/Profile";
+import Search from "../components/Search/NotFound";
 
 const AppRouter = () => (
   <Router>
@@ -18,6 +19,7 @@ const AppRouter = () => (
         <Route path="/image-board/login" component={Login} />
         <Route path="/image-board/register" component={Register} />
         <Route path="/image-board/profile/:userId" component={Profile} />
+        <Route path="/image-board/search" component={Search} />
         <Route component={NotFound} />
       </Switch>
     </Main>
