@@ -1,16 +1,29 @@
 import React from "react";
 import { Provider } from "react-redux";
+import jwt_decode from "jwt-decode";
 import { ConfirmProvider } from "material-ui-confirm";
 
-import { store } from "./store/configureStore";
 import { headers } from "./utils/useFetch";
-import { setUser } from "./actions/userActions";
+import { setUser, logoutUser } from "./actions/userActions";
+import { store } from "./store/configureStore";
 import AppRouter from "./router";
+
+interface JwtLocalStorage {
+  token: string;
+  expiresIn: number;
+}
 
 const token = localStorage.getItem("jwt");
 if (token) {
-  headers.append("Authorization", token);
-  store.dispatch(setUser());
+  const decodedJwt: JwtLocalStorage = jwt_decode(token);
+  const currentTime = Date.now() / 1000;
+
+  if (currentTime > decodedJwt.expiresIn) {
+    store.dispatch(logoutUser());
+  } else {
+    headers.append("Authorization", token);
+    store.dispatch(setUser());
+  }
 }
 
 const App: React.FC = () => {

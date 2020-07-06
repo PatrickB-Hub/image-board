@@ -63,7 +63,7 @@ const SearchForm: React.FC<Props> = ({ searchProfile }) => {
   const history = useHistory();
   const classes = useStyles();
 
-  const handleKeypress = async (e: any) => {
+  const handleKeypress = (e: any) => {
     const searchData: { text: string } = {
       text: e.target.value,
     };

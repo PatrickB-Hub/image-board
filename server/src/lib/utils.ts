@@ -57,7 +57,7 @@ const genPassword = (password: crypto.BinaryLike) => {
 const issueJWT = (id: string) => {
 
   // set to expire in 48 hours
-  const expiresIn = Math.floor(Date.now() / 1000) + 2 * 84600;
+  const expiresIn = Date.now() + 2 * 84600 * 1000;
   const payload = {
     sub: id,
     iat: Date.now(),
