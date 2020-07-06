@@ -16,7 +16,7 @@ interface JwtLocalStorage {
 const token = localStorage.getItem("jwt");
 if (token) {
   const decodedJwt: JwtLocalStorage = jwt_decode(token);
-  const currentTime = Date.now() / 1000;
+  const currentTime = Date.now();
 
   if (currentTime > decodedJwt.expiresIn) {
     store.dispatch(logoutUser());
