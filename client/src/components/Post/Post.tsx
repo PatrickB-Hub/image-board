@@ -67,6 +67,10 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: 10,
       paddingLeft: 15,
     },
+    action: {
+      alignSelf: "center",
+      margin: 0,
+    },
     userProfile: {
       margin: 0,
     },
@@ -216,13 +220,11 @@ const SinglePost: React.FC<Props> = ({
   };
 
   const deleteBtn = (
-    <div style={{ margin: "15px 10px 10px 0" }}>
-      <Tooltip title="Delete post">
-        <IconButton size="small" aria-label="delete" onClick={handleDelete}>
-          <DeleteIcon style={{ margin: 4 }} />
-        </IconButton>
-      </Tooltip>
-    </div>
+    <Tooltip title="Delete post">
+      <IconButton size="small" aria-label="delete" onClick={handleDelete}>
+        <DeleteIcon style={{ margin: 4 }} />
+      </IconButton>
+    </Tooltip>
   );
 
   return (
@@ -231,6 +233,7 @@ const SinglePost: React.FC<Props> = ({
         {/* card header with avatar, username and the upload date */}
         <CardHeader
           className={classes.cardHeader}
+          classes={{ action: classes.action }}
           avatar={
             <Avatar
               alt={username}
