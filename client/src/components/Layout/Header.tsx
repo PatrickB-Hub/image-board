@@ -107,17 +107,15 @@ const Header: React.FC<Props> = ({ logoutUser, isAuthenticated, user }) => {
         anchorEl={anchorEl}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>
-          <Link to={`/image-board/profile/${user._id}`}>Profile</Link>
-        </MenuItem>
-        <MenuItem>
-          <Link to="/image-board/followed">Followed</Link>
-        </MenuItem>
-        <MenuItem>
-          <Link to="/image-board/" onClick={handleLogout}>
-            Log Out
-          </Link>
-        </MenuItem>
+        <Link to={`/image-board/profile/${user._id}`}>
+          <MenuItem onClick={handleClose}>Profile</MenuItem>
+        </Link>
+        <Link to="/image-board/followed">
+          <MenuItem onClick={handleClose}>Followed</MenuItem>
+        </Link>
+        <Link to="/image-board/" onClick={handleLogout}>
+          <MenuItem>Log Out</MenuItem>
+        </Link>
       </Menu>
     </div>
   );
