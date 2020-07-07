@@ -17,7 +17,7 @@ const token = localStorage.getItem("jwt");
 if (token) {
   const decodedJwt: JwtLocalStorage = jwt_decode(token);
   const currentTime = Date.now();
-  console.log(decodedJwt)
+
   if (currentTime > decodedJwt.exp) {
     store.dispatch(logoutUser());
   } else {
