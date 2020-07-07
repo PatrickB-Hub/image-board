@@ -10,15 +10,15 @@ import AppRouter from "./router";
 
 interface JwtLocalStorage {
   token: string;
-  expiresIn: number;
+  exp: number;
 }
 
 const token = localStorage.getItem("jwt");
 if (token) {
   const decodedJwt: JwtLocalStorage = jwt_decode(token);
   const currentTime = Date.now();
-
-  if (currentTime > decodedJwt.expiresIn) {
+  console.log(decodedJwt)
+  if (currentTime > decodedJwt.exp) {
     store.dispatch(logoutUser());
   } else {
     headers.append("Authorization", token);
