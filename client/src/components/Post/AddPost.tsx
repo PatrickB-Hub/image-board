@@ -104,7 +104,10 @@ const TestPost: React.FC<Props> = ({ addPost }) => {
 
   return (
     <div className={classes.container}>
-      <Tooltip title="Post your own picure" aria-label="add">
+      <Tooltip
+        title="Post your own picture"
+        aria-label="add"
+      >
         <Fab color="primary" onClick={handleOpen} className={classes.addBtn}>
           <AddIcon />
         </Fab>

@@ -295,7 +295,7 @@ const SinglePost: React.FC<Props> = ({
 
             {location && (
               <span className={classes.details}>
-                <Tooltip title="Location where the image was taken">
+                <Tooltip title="Location where the picture was taken">
                   <Location fontSize="small" style={{ marginRight: 5 }} />
                 </Tooltip>
                 {location}

@@ -111,11 +111,11 @@ const Profile: React.FC<Props> = ({
   if (profile && items) {
     const { email, username, followers, following } = profile;
 
-    let followBtns;
+    let followBtn;
 
     if (isAuthenticated) {
       if (_id && followers && !followers.includes(_id)) {
-        followBtns = (
+        followBtn = (
           <div className={classes.btnBlock}>
             <Button
               size="small"
@@ -128,7 +128,7 @@ const Profile: React.FC<Props> = ({
           </div>
         );
       } else {
-        followBtns = (
+        followBtn = (
           <div className={classes.btnBlock}>
             <Button
               size="small"
@@ -158,7 +158,7 @@ const Profile: React.FC<Props> = ({
             {username?.substr(0, 2)}
           </Avatar>
           <h2 className={classes.username}>{username}</h2>
-          {userId !== _id && followBtns}
+          {userId !== _id && followBtn}
           <div className={classes.email}>{email}</div>
           <div style={{ height: "1px", backgroundColor: "#999" }} />
           <div className={classes.detailsBlock}>
