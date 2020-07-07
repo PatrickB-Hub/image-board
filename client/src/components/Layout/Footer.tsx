@@ -1,7 +1,9 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Box, AppBar, Toolbar, makeStyles } from "@material-ui/core";
 
 import AddPost from "../Post/AddPost";
+import { AppState } from "../../store/configureStore";
 
 const useStyles = makeStyles({
   root: {
@@ -21,12 +23,14 @@ const useStyles = makeStyles({
   },
 });
 
-const Footer = () => {
+type Props = LinkStateProps;
+
+const Footer: React.FC<Props> = ({ isAuthenticated }) => {
   const classes = useStyles();
 
   return (
     <>
-      <AddPost />
+      {isAuthenticated && <AddPost />}
       <Box className={classes.root} boxShadow={3}>
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
@@ -47,4 +51,12 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+interface LinkStateProps {
+  isAuthenticated: boolean;
+}
+
+const mapStateToProps = (state: AppState): LinkStateProps => ({
+  isAuthenticated: state.user.isAuthenticated,
+});
+
+export default connect(mapStateToProps)(Footer);

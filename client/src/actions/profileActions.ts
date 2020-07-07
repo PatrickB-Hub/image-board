@@ -10,7 +10,6 @@ import { AppActions } from "../types/actions";
 
 import useFetch, { API_URL } from "../utils/useFetch";
 
-
 export const getProfile = (userId: string, refresh?: boolean) => (dispatch: Dispatch<AppActions>) => {
   if (!refresh)
     dispatch(loadingProfile());

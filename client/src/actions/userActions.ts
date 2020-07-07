@@ -7,7 +7,6 @@ import { AppActions } from "../types/actions";
 
 import useFetch, { headers, API_URL } from "../utils/useFetch";
 
-
 export const registerUser = (userData: User, history: any) => (dispatch: Dispatch<AppActions>) => {
   useFetch("POST", API_URL + "/users/register", userData)
     .then(data => {
@@ -25,7 +24,6 @@ export const registerUser = (userData: User, history: any) => (dispatch: Dispatc
       errors: err
     }));
 }
-
 
 export const loginUser = (userData: User) => (dispatch: Dispatch<AppActions>) => {
   useFetch("POST", API_URL + "/users/login", userData)
@@ -57,17 +55,15 @@ export const loginUser = (userData: User) => (dispatch: Dispatch<AppActions>) =>
     });
 }
 
-
 export const logoutUser = () => (dispatch: Dispatch<AppActions>) => {
-	localStorage.removeItem("jwt");
-	headers.delete("Authorization");
-	dispatch({
-		type: SET_USER,
-		user: {}
-	});
-	window.location.href = "/image-board/";
+  localStorage.removeItem("jwt");
+  headers.delete("Authorization");
+  dispatch({
+    type: SET_USER,
+    user: {}
+  });
+  window.location.href = "/image-board/";
 }
-
 
 export const setUser = () => (dispatch: Dispatch<AppActions>) => {
   useFetch("GET", API_URL + "/users")
