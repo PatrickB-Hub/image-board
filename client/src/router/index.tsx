@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 
 import Main from "../components/Layout/Main";
 import Home from "../components/Routes/Home";
@@ -20,6 +20,7 @@ const AppRouter = () => (
         <Route path="/image-board/register" component={Register} />
         <Route path="/image-board/profile/:userId" component={Profile} />
         <Route path="/image-board/search" component={Search} />
+        <Redirect exact from="/" to="/image-board/" />
         <Route component={NotFound} />
       </Switch>
     </Main>

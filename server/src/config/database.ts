@@ -1,27 +1,13 @@
 import mongoose from "mongoose";
 
-const devConnection = process.env.DB_STRING;
-const prodConnection = process.env.PROD_DB_STRING;
+const DB_STRING = `mongodb://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@mongo:27017/${process.env.MONGO_DB_DATABASE}`
 
-// Connect to the correct database
-if (process.env.NODE_ENV === "production") {
-  mongoose.connect(`${prodConnection}`, {
-    useNewUrlParser: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-  });
+mongoose.connect(DB_STRING, {
+  useNewUrlParser: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true,
+});
 
-  mongoose.connection.on("connected", () => {
-    console.log("Database connected");
-  });
-} else {
-  mongoose.connect(`${devConnection}`, {
-    useNewUrlParser: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-  });
-
-  mongoose.connection.on("connected", () => {
-    console.log("Database connected");
-  });
-}
+mongoose.connection.on("connected", () => {
+  console.log("Database connected");
+});

@@ -1,5 +1,12 @@
 import { Schema, Document, model } from "mongoose";
 
+export type UserType = {
+  _id: string;
+  email: string;
+  username: string;
+  followers: String[];
+  following: String[];
+}
 export interface UserDocument extends Document {
   email: string;
   username: string;

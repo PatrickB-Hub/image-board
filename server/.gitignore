@@ -3,8 +3,7 @@
 
 # production
 /dist
-/mongo-data
-/mongo
+/mongo/data
 
 # misc
 /ssl-cert

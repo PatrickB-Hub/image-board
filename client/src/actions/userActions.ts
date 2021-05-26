@@ -30,8 +30,8 @@ export const loginUser = (userData: User) => (dispatch: Dispatch<AppActions>) =>
     .then(data => {
       if (data.success) {
         // store jwt in local storage
-        const { token } = data;
-        localStorage.setItem("jwt", token);
+        const { token, expiresIn } = data;
+        localStorage.setItem("jwt", JSON.stringify({ token, expiresIn }));
 
         // set current user
         headers.append("Authorization", token);

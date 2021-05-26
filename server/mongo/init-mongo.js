@@ -11,12 +11,12 @@ const userData = [
 
 let res = [
     db.createUser({
-        user: process.env.MONGO_DB_USER,
-        pwd: process.env.MONGO_DB_PASSWORD,
+        user: "MONGO_DB_USER",
+        pwd: "MONGO_DB_PASSWORD",
         roles: [
             {
                 role: "readWrite",
-                db: "image_sharing"
+                db: "MONGO_DB_DATABASE"
             },
         ]
     }),

@@ -70,8 +70,9 @@ const Login: React.FC<Props> = ({ loginUser, isAuthenticated, errors }) => {
         <h2 className={classes.title}>Login</h2>
         <form onSubmit={handleSubmit}>
           <TextField
-            type="email"
             label="Email"
+            type="email"
+            autoComplete="username"
             className={classes.textField}
             value={loginInfo.email}
             onChange={handleChange}
@@ -82,6 +83,7 @@ const Login: React.FC<Props> = ({ loginUser, isAuthenticated, errors }) => {
           <TextField
             label="Password"
             type="password"
+            autoComplete="current-password"
             name="password"
             value={loginInfo.password}
             onChange={handleChange}

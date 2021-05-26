@@ -55,9 +55,8 @@ type Props = LinkStateProps & LinkDispatchProps;
 const Header: React.FC<Props> = ({ logoutUser, isAuthenticated, user }) => {
   const classes = useStyles();
 
-  const [anchorEl, setAnchorEl] = useState<
-    (EventTarget & HTMLButtonElement) | null
-  >(null);
+  const [anchorEl, setAnchorEl] =
+    useState<(EventTarget & HTMLButtonElement) | null>(null);
 
   const handleMenu = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setAnchorEl(e.currentTarget);
@@ -124,7 +123,7 @@ const Header: React.FC<Props> = ({ logoutUser, isAuthenticated, user }) => {
     <div className={classes.root}>
       <AppBar color="primary" position="static">
         <Toolbar className={classes.space}>
-          <Link to="/image-board" className={classes.logo}>
+          <Link to="/image-board/" className={classes.logo}>
             <img alt="logo" src="camera_logo.png" style={{ width: 40 }} />
           </Link>
           {isAuthenticated && <SearchForm />}

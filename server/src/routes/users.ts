@@ -7,6 +7,7 @@ import validateRegisterInput from "../validation/register";
 import validateLoginInput from "../validation/login";
 
 import User from "../models/user";
+import { UserType } from "../models/user";
 
 
 const router = express.Router();
@@ -63,11 +64,12 @@ router.post("/login", (req, res, next) => {
 
       if (isValid) {
         const tokenObject = issueJWT(user.id);
-
+        const { _id, email, username } = user
         res.status(200).json({
           success: true,
           token: tokenObject.token,
           expiresIn: tokenObject.expires,
+          user: { _id, email, username }
         });
       } else {
         res.status(401).json({ success: false, errors: { password: "You entered the wrong password." } });
@@ -81,7 +83,7 @@ router.get("/",
   (req, res, next) => {
     try {
       if (req.user) {
-        const { _id, email, username } = req.user;
+        const { _id, email, username } = req.user as UserType;
         res.status(200).json({
           success: true,
           user: {
@@ -101,7 +103,7 @@ router.route("/follow")
     passport.authenticate("jwt", { session: false }),
     (req, res, next) => {
       if (req.user) {
-        const { _id } = req.user;
+        const { _id } = req.user as UserType;
         const { profileId } = req.body;
 
         User.findOneAndUpdate({
@@ -140,7 +142,7 @@ router.route("/unfollow")
     passport.authenticate("jwt", { session: false }),
     (req, res, next) => {
       if (req.user) {
-        const { _id } = req.user;
+        const { _id } = req.user as UserType;
         const { profileId } = req.body;
 
         User.findOneAndUpdate({

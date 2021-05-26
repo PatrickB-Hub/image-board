@@ -29,25 +29,27 @@ app.use(cors());
 app.use(router);
 app.use('/static', express.static('public'));
 
-// const port = 8085;
-// app.listen(port, () => {
-//   console.log(`Server running on port ${port}`);
-// });
+if (!process.env.SSL_CERTIFICATE) {
+  const port = process.env.EXPRESS_PORT || 8085;
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+} else {
+  // OPTIONAL - SSL-Certificate
+  const privateKey = fs.readFileSync('./privkey.pem', 'utf8');
+  const certificate = fs.readFileSync('./cert.pem', 'utf8');
+  const ca = fs.readFileSync('./chain.pem', 'utf8');
 
-// OPTIONAL - SSL-Certificate
-const privateKey = fs.readFileSync('./privkey.pem', 'utf8');
-const certificate = fs.readFileSync('./cert.pem', 'utf8');
-const ca = fs.readFileSync('./chain.pem', 'utf8');
+  const credentials = {
+    key: privateKey,
+    cert: certificate,
+    ca: ca
+  };
 
-const credentials = {
-  key: privateKey,
-  cert: certificate,
-  ca: ca
-};
+  // OPTIONAL - only works with SSL-Certificate
+  const httpsServer = https.createServer(credentials, app);
 
-// OPTIONAL - only works with SSL-Certificate
-const httpsServer = https.createServer(credentials, app);
-
-httpsServer.listen(443, () => {
-  console.log('Server running on port 443');
-});
+  httpsServer.listen(443, () => {
+    console.log('Server running on port 443');
+  });
+}

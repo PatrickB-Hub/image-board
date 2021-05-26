@@ -30,8 +30,8 @@ export default (
     errors.username = "Username is required.";
   }
 
-  if (!Validator.isLength(data.username, { min: 4, max: 30 })) {
-    errors.username = "The username may only be between 4 and 30 characters long.";
+  if (!Validator.isLength(data.username, { min: 3, max: 16 })) {
+    errors.username = "The username may only be between 3 and 16 characters long.";
   }
 
   if (Validator.isEmpty(data.password)) {

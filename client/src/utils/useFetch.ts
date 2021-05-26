@@ -11,4 +11,4 @@ export default async (method: string, url: string, data?: any, isFormData?: bool
   }
 }
 
-export const API_URL = "https://v2202003114332112298.powersrv.de/api";
+export const API_URL = process.env.REACT_APP_API_URL as string;

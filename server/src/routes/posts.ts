@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { calcOverallRating } from "../lib/utils";
 
 import Post from "../models/post";
+import { UserType } from "../models/user";
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.post("/add",
       if (req.user) {
         const file: any = req.files.file;
 
-        const { _id, username } = req.user;
+        const { _id, username } = req.user as UserType;
         const fileName = uuidv4();
 
         // move image to upload folder
@@ -67,6 +68,7 @@ router.delete("/delete",
   });
 
 router.get("/",
+  passport.authenticate("jwt", { session: false }),
   (_req, res) => {
     Post.find()
       .populate({ path: "user", select: "username" })
@@ -79,8 +81,9 @@ router.get("/following",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     if (req.user) {
+      const { following } = req.user as UserType;
       Post.find({
-        "user": { $in: req.user.following }
+        "user": { $in: following }
       })
         .populate({ path: "user", select: "username" })
         .sort({ createdAt: -1 })
@@ -102,12 +105,13 @@ router.put("/rating",
         if (req.user && post && post.rating) {
           const { overallRating, totalRating, individualRatings } = post.rating;
 
+          const { _id: userID } = req.user as UserType;
           const newRating = calcOverallRating(
             overallRating,
             totalRating,
             individualRatings,
             rating,
-            req.user._id
+            userID
           );
 
           Post.updateOne({ _id }, { rating: newRating })
