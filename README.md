@@ -33,16 +33,16 @@ To install the packages through yarn, run the command `yarn add`
 
 NOTE: In the rest of the documentation, you will come across npm being used for running commands. To use yarn in place of npm for the commands, simply substitute npm for yarn. Example, npm start as yarn start. For more help, checkout [migrating from npm](https://classic.yarnpkg.com/en/docs/migrating-from-npm/).
 
+### Environment Variables
+
+**API**  
+ `REACT_APP_API_URL` - backend url (i.e. - 'http://localhost:8085/api')
+ 
 ## Running
 
 NOTE: The backend code should be running in order for the front end to behave correctly. See [Image-Board Backend](https://github.com/PatrickB-Hub/image-board/tree/main/server/README.md).
 
 Make sure the necessary dependencies are installed, add environment variables, and type the command `npm start`
-
-### Environment Variables
-
-**API**  
- `REACT_APP_API_URL` - backend url (i.e. - 'http://localhost:8085/api')
 
 ## Testing
 
