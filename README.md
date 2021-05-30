@@ -1,6 +1,6 @@
 # [Image-Board](https://patrickb-hub.github.io/image-board)
 
-Post your images and see what your friends are posting. Comment and rate other posts. See [Image-Board Backend](https://github.com/PatrickB-Hub/image-board/tree/main/server) for the back end code.
+Post your images and see what your friends are posting. Comment and rate other posts. Register/Login functionality using JWT. Persistent data storage with MongoDB. The complete Backend is ready to be deployed as a docker container. See [Image-Board Backend](https://github.com/PatrickB-Hub/image-board/tree/main/server) for the back end code.
 
 ![Image-Board Posts](https://patrickbecker.me/static/media/image-board.1af3cbdb.jpg)
 
@@ -37,7 +37,7 @@ NOTE: In the rest of the documentation, you will come across npm being used for 
 
 **API**  
  `REACT_APP_API_URL` - backend url (i.e. - 'http://localhost:8085/api')
- 
+
 ## Running
 
 NOTE: The backend code should be running in order for the front end to behave correctly. See [Image-Board Backend](https://github.com/PatrickB-Hub/image-board/tree/main/server/README.md).
