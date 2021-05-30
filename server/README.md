@@ -29,6 +29,8 @@ After installing dependencies run `npm run build` and create a Keypair consistin
 
 ### 2. Run `npm run dev` for development
 
+### 3. Run `docker-compose up` to spin up a docker container
+
 ## Testing
 
 There are currently no tests. (This would be a great way to contribute!)
