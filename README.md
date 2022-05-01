@@ -7,7 +7,7 @@ Post your images and see what your friends are posting. Comment and rate other p
 ## Features
 
 - Sign up or log in
-- Post images with discriptions
+- Post images with descriptions
 - View posts by other users
 - Search for users by name
 - Follow users
